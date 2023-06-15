@@ -111,8 +111,16 @@ class TopicForm(FlaskForm):
 # you modify them?
 
 class SpecialTopicForm(TopicForm):
-    # ADD CODE HERE
-    pass
+    def save(self, user, forum):
+        topic = Topic(title=f"Special Topic {self.title.data}", content=self.content.data)
+
+        if self.track_topic.data:
+            user.track_topic(topic)
+        else:
+            user.untrack_topic(topic)
+
+        current_app.pluggy.hook.flaskbb_form_topic_save(form=self, topic=topic)
+        return topic.save(user=user, forum=forum)
 
 ###################################################################
 
