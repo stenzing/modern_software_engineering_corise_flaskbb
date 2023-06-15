@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime as dt
+import pytest
 
 from flaskbb.forum.models import Forum
 from flaskbb.utils.helpers import (
@@ -12,6 +13,9 @@ from flaskbb.utils.helpers import (
     slugify,
     time_utcnow,
     topic_is_unread,
+    to_bytes,
+    to_unicode,
+    redirect_url
 )
 from flaskbb.utils.settings import flaskbb_config
 
@@ -24,6 +28,20 @@ from flaskbb.utils.settings import flaskbb_config
 # NOTE: You'll need to import them from flaskbb.utils.helpers
 
 # ADD CODE HERE
+
+def test_to_bytes():
+    """Test the to_bytes helper method."""
+    assert to_bytes(u"Hello world") == b"Hello world"
+
+def test_to_unicode():
+    """Test the to_unicode helper method."""
+    assert to_unicode(b"Hello world") == u"Hello world"
+
+def test_redirect_url():
+    """Test the redirect_url helper method."""
+    with pytest.raises(RuntimeError) as er:
+        redirect_url("http://www.index.hu")
+    assert redirect_url("https://www.index.hu", False) == None
 
 ###################################################################
 
