@@ -46,19 +46,21 @@ jobs:
         key: pip|${{ runner.os }}|${{ matrix.python-version }}|${{ hashFiles('requirements*.txt') }}
 
     - name: Install dependencies
-        # Install all the dependencies
-        # TODO: ADD CODE HERE
+      run: |
+        pip install -r requirements.txt
 
     - name: Prepare FlaskBB
       run: |
         flaskbb translations compile
         
     - name: Test with pytest
-        # Implement test step
-        # TODO: ADD CODE HERE
+      run: |
+        pytest --cov=./ --cov-report=html
         
     - name: Upload coverage
-        # Implement coverage step
-        # TODO: ADD CODE HERE
+      uses: actions/upload-artifact@v3
+      with:
+        name: code coverage report
+        path: tests/htmlcov/
       
 ###################################################################
