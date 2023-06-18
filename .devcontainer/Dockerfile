@@ -10,6 +10,11 @@ ARG VENV_PATH="/home/vscode/venv"
 # Setup a virtual environment, install the necessary modules, delete tmp files
 RUN su vscode -c "python -m venv /home/vscode/venv" 
 
+# Setup aws cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && sudo ./aws/install
+
 # Setup terraform
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends rcm \
