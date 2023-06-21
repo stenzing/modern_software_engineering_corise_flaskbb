@@ -61,8 +61,8 @@ jobs:
         pip install wheel
         pip install -r requirements-dev.txt
         pip install -e .
-        playwrite install
-        playwrite install-deps
+        playwright install
+        playwright install-deps
 
     - name: Prepare FlaskBB
       run: |
