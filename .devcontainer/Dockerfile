@@ -12,6 +12,7 @@ RUN su vscode -c "python -m venv /home/vscode/venv"
 
 # Setup docker
 RUN curl -s https://get.docker.com/ | sudo bash
+RUN sudo usermod -aG docker vscode
 
 # Setup act
 RUN curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
