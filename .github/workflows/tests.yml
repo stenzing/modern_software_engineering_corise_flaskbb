@@ -4,6 +4,8 @@
 name: test
 
 on:
+  pull_request:
+    branches:  [ '*' ]
   push:
     branches: [ main ]
     paths-ignore:
