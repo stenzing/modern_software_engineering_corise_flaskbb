@@ -58,10 +58,18 @@ jobs:
         flaskbb translations compile
     
     # CoRise TODO: add another job to the workflow that will run flake8 and report any errors that were introduced in the proposed change
+            
+    - name: run flake8 tests
+      run: |
+        flake8 --select E9,F63,F7,F82  --count --quiet flaskbb/
         
     - name: Test with pytest
       run: |
         pytest --cov=./ --cov-report=html
+                    
+    - name: run flake8 statistics
+      run: |
+        flake8 --exit-zero --statistics flaskbb/
         
     - name: Upload code coverage results
       uses: actions/upload-artifact@v3
