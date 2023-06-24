@@ -27,9 +27,10 @@ from flaskbb.forum.forms import (EditTopicForm, NewTopicForm, QuickreplyForm,
                                  UserSearchForm)
 from flaskbb.forum.models import (Category, Forum, ForumsRead, Post, Topic,
                                   TopicsRead)
+from flaskbb.forum.topic_manager import TopicManager
 from flaskbb.markup import make_renderer
 from flaskbb.user.models import User
-from flaskbb.utils.helpers import (FlashAndRedirect, do_topic_action,
+from flaskbb.utils.helpers import (FlashAndRedirect,
                                    format_quote, get_online_users, real,
                                    register_view, render_template, time_diff,
                                    time_utcnow)
@@ -402,58 +403,27 @@ class ManageForum(MethodView):
                 ), "danger"
             )
             return redirect(mod_forum_url)
+        
+        mgr = TopicManager(real(current_user), forum_instance, tmp_topics)
 
         # locking/unlocking
-        if "lock" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="locked",
-                reverse=False
-            )
+        if "lock" in request.form or "unlock" in request.form:
+            changed = mgr.set_locking("unlock" in request.form)
 
             flash(_("%(count)s topics locked.", count=changed), "success")
             return redirect(mod_forum_url)
 
-        elif "unlock" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="locked",
-                reverse=True
-            )
-            flash(_("%(count)s topics unlocked.", count=changed), "success")
-            return redirect(mod_forum_url)
-
         # highlighting/trivializing
-        elif "highlight" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="important",
-                reverse=False
-            )
-            flash(_("%(count)s topics highlighted.", count=changed), "success")
-            return redirect(mod_forum_url)
+        elif "highlight" in request.form or "trivialize" in request.form:
+            changed = mgr.set_important("trivialize" in request.form)
 
-        elif "trivialize" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="important",
-                reverse=True
-            )
-            flash(_("%(count)s topics trivialized.", count=changed), "success")
+            flash(_("%(count)s topics highlighted.", count=changed), "success")
             return redirect(mod_forum_url)
 
         # deleting
         elif "delete" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="delete",
-                reverse=False
-            )
+            changed = mgr.delete()
+
             flash(_("%(count)s topics deleted.", count=changed), "success")
             return redirect(mod_forum_url)
 
@@ -477,7 +447,7 @@ class ManageForum(MethodView):
                 )
                 return redirect(mod_forum_url)
 
-            if new_forum.move_topics_to(tmp_topics):
+            if mgr.move_topic(new_forum):
                 flash(_("Topics moved."), "success")
             else:
                 flash(_("Failed to move topics."), "danger")
@@ -486,23 +456,14 @@ class ManageForum(MethodView):
 
         # hiding/unhiding
         elif "hide" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="hide",
-                reverse=False
-            )
+            changed = mgr.hide()
+
             flash(_("%(count)s topics hidden.", count=changed), "success")
             return redirect(mod_forum_url)
-
         elif "unhide" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="unhide",
-                reverse=False
-            )
-            flash(_("%(count)s topics unhidden.", count=changed), "success")
+            changed = mgr.unhide()
+
+            flash(_("%(count)s topics hidden.", count=changed), "success")
             return redirect(mod_forum_url)
 
         else:
