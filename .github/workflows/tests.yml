@@ -87,5 +87,5 @@ jobs:
 
     - name: Build binary distribution and upload to artifactory
         # CoRise TODO: implement a conditional step to build the distribution and upload the artifact on push to main
-        # use the python bdist command.
+        # use the zip command from deploy.sh for inspiration
        
