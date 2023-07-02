@@ -4,7 +4,7 @@ This document describes the overall architecture of the Forum Application.
 
 ## Highlevel Component Digram
 
-![Component Diagram](component_diagram.jpg)
+![Component Diagram](system_diagram.jpg)
 
 CoRise TODO: replace the diagram image, and add a text description
 
