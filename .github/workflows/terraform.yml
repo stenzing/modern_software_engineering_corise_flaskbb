@@ -8,7 +8,7 @@ on:
         paths:
             - 'terraform/*'
             - '.github/workflows/terraform.yaml'
-    pull-requests:
+    pull_request:
         branches: [ main ]
         paths:
             - 'terraform/*'
@@ -35,6 +35,9 @@ jobs:
     runs-on: ubuntu-latest
 
     name: Validate, Plan, and Apply
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.TERRAFORM_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.TERRAFORM_AWS_SECRET_ACCESS_KEY }}
     
     steps:
       - uses: actions/checkout@v2

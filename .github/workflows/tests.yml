@@ -16,18 +16,18 @@ on:
       - '**/LICENSE'
       - 'terraform/**'
       - .github/workflows/terraform.yml
-    pull_request:
-      branches: [ main ]
-      paths-ignore:
-        - 'docs/**'
-        - 'flaskbb/themes/**'
-        - '**.md'
-        - '**.rst'
-        - '**/CHANGES'
-        - '**/AUTHORS'
-        - '**/LICENSE'
-        - 'terraform/**'
-        - .github/workflows/terraform.yml
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - 'flaskbb/themes/**'
+      - '**.md'
+      - '**.rst'
+      - '**/CHANGES'
+      - '**/AUTHORS'
+      - '**/LICENSE'
+      - 'terraform/**'
+      - .github/workflows/terraform.yml
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.10]
+        python-version: ["3.10"]
 
     steps:
     - uses: actions/checkout@v2
@@ -61,8 +61,8 @@ jobs:
         pip install wheel
         pip install -r requirements-dev.txt
         pip install -e .
-        playwrite install
-        playwrite install-deps
+        playwright install
+        playwright install-deps
 
     - name: Prepare FlaskBB
       run: |
@@ -87,5 +87,5 @@ jobs:
 
     - name: Build binary distribution and upload to artifactory
         # CoRise TODO: implement a conditional step to build the distribution and upload the artifact on push to main
-        # use the python bdist command.
+        # use the zip command from deploy.sh for inspiration
        
