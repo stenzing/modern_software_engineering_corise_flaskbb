@@ -16,7 +16,7 @@ jobs:
             - name: Download latest build
               uses: actions/download-artifact@v3
               with: 
-                name: my-artifact
+                name: application
                 path: flaskbb_deploy-${{github.sha}}.zip
 
                 
